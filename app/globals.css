@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* scroll bar */
+#note-text-textarea::-webkit-scrollbar {
+    display: none;
+}

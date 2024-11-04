@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import {Provider} from 'react-redux'
 
-// store
-import {store} from '../store'
 import "./globals.css";
 
+// components
+// header
+import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,12 +17,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Provider store={store}>
     <html lang="en">
       <body>
-        {children}
+        {/* container */}
+        <div className="w-screen h-screen overflow-hidden">
+          <div className="max-w-[720px] mx-auto h-screen flex flex-col py-1.5">
+            {/* header */}
+            <Header />
+            {/* content */}
+            <div className="flex-1">{children}</div>
+          </div>
+        </div>
       </body>
     </html>
-    </Provider>
   );
 }
