@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import {filesize} from 'filesize';
 
 // icons
 import { IoMdAttach } from "react-icons/io";
@@ -14,6 +16,9 @@ const NewNote = () => {
   const [noteFiles, setNoteFiles] = useState<File[]>([]);
   //   file description
   const [noteFileDescription, setNoteFileDescription] = useState<string>("");
+
+  // hooks
+  const router = useRouter()
 
   // reference
   // note text area reference
@@ -69,6 +74,51 @@ const NewNote = () => {
     let filteredNoteFiles = noteFiles.filter((fileItem, i) => i !== index);
     setNoteFiles(filteredNoteFiles);
   };
+
+  // add new note text only handler
+  const addNewNoteTextOnlyHandler = async () => {
+    if(noteText.trim()){
+      let formData = new FormData()
+      formData.append("text",noteText)
+      const response = await fetch("http://localhost:5000/api/notes/new",{
+        method: 'POST',
+        body: formData
+      })
+      const data = await response.json()
+      console.log(data)
+      if(data.newNote){
+        router.push("/")
+      
+      if(noteTextAreaReference.current){
+        noteTextAreaReference.current.style.height = "18px"
+      }
+      setNoteText("")
+    }
+    }
+
+  }
+
+  // add new note with file handler
+  const addNewNoteWithFileHandler = async () => {
+    if(noteFiles.length > 0 && noteFileDescription.trim()){
+      let formData = new FormData()
+      formData.append("text",noteFileDescription)
+      Array.from(noteFiles).forEach((file, index) => {
+        formData.append(`images`, file);
+      });
+      const response = await fetch("http://localhost:5000/api/notes/new",{
+        method: 'POST',
+        body: formData
+      })
+
+      const data = await response.json()
+      if(data.newNote){
+        router.push("/")
+        setNoteFiles([])
+        setNoteFileDescription("")
+      }
+    }
+  }
   return (
     <div className="px-[5%] py-1.5 flex items-end gap-x-5">
       {/* file picker */}
@@ -98,14 +148,14 @@ const NewNote = () => {
         ></textarea>
       </div>
       {/* send button */}
-      <button>
+      <button onClick={addNewNoteTextOnlyHandler}>
         <GrSend className="text-green-600 text-xl" />
       </button>
 
       {/* file description */}
       {noteFiles && noteFiles.length > 0 && (
         <div className="fixed left-0 top-0 w-screen h-screen z-50">
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[50vh] w-[50%] bg-white shadow-2xl rounded-md overflow-hidden p-5">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] sm:w-[75%] md:w-[60%] lg:w-[50%]  xl:w-[40%] bg-white shadow-2xl rounded-md overflow-hidden p-5">
             {/* file list */}
             <div>
               {noteFiles.map((noteFileItem, index) => {
@@ -131,7 +181,7 @@ const NewNote = () => {
                         <p className="text-sm text-green-600">
                           {noteFileItem.name}
                         </p>
-                        <p className="text-neutral-500 text-xs -mt-1.5">size</p>
+                        <p className="text-neutral-500 text-[.75rem] -mt-1 lowercase">{filesize(noteFileItem.size)}</p>
                       </div>
                     </div>
                     {/* remove file button */}
@@ -161,7 +211,7 @@ const NewNote = () => {
                 ></textarea>
               </div>
               {/* button */}
-              <button>
+              <button onClick={addNewNoteWithFileHandler}>
                 <GrSend className="text-green-600 text-xl" />
               </button>
             </div>

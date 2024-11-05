@@ -1,13 +1,25 @@
 "use client"
 import React from 'react'
+import { useRouter } from 'next/navigation';
 // icons
 import { RiDeleteBin6Line } from "react-icons/ri";
+
+
 const DeleteNoteBtn = ({_id}:{_id: string}) => {
+    // hooks
+    const router = useRouter()
 
     // delete note handler
-    const deleteNoteHandler = () => {
+    const deleteNoteHandler = async () => {
 
-        console.log(_id)
+        const response = await fetch(`http://localhost:5000/api/notes/delete/${_id}`,{
+            method: 'DELETE'
+        })
+        const data = await response.json()
+        if(data.message === "note deleted successfully"){
+            router.push('/')
+        }
+        console.log(data)
     }
   return (
     <button onClick={deleteNoteHandler}>
