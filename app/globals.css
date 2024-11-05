@@ -6,3 +6,20 @@
 #note-text-textarea::-webkit-scrollbar {
     display: none;
 }
+
+#file-description-textarea::-webkit-scrollbar {
+    display: none;
+}
+
+/* note list container */
+#note-list-container::-webkit-scrollbar {
+    width: 3px;
+}
+#note-list-container::-webkit-scrollbar-track {
+    background-color: rgb(185, 185, 185);
+    border-radius: 3px;
+}
+#note-list-container::-webkit-scrollbar-thumb {
+    background-color: rgb(152, 152, 152);
+    border-radius: 3px;
+}
