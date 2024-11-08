@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* textarea */
+textarea::-webkit-scrollbar {
+    display: none;
+}
+
+#note-list-container::-webkit-scrollbar {
+    width: 3px;
+}
+#note-list-container::-webkit-scrollbar-track {
+    background-color: rgb(212, 212, 212);
+}
+#note-list-container::-webkit-scrollbar-thumb {
+    background-color: rgb(170, 170, 170);
+}
