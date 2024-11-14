@@ -22,12 +22,9 @@ const counterSlice = createSlice({
                 state.counter-=1
             }
         },
-        getInitialState: state => {
-            return initialState
-        }
     }
 })
 
 // exports
-export const {updateCounter,getInitialState} = counterSlice.actions
+export const {updateCounter} = counterSlice.actions
 export default counterSlice.reducer
